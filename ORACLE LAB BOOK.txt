@@ -1,0 +1,569 @@
+1.1 Data Query Language
+create table book_transaction ( book_code number(10), student_code number(10), staff_code number(10), book_issue_date date NOT NULL, book_expected_return_date date NOT NULL, book_actual_return_date date NOT NULL, CONSTRAINT book_fk FOREIGN KEY(book_code) REFERENCES BOOK_MASTER(book_code), CONSTRAINT FK_student FOREIGN KEY(STUDENT_CODE) REFERENCES Student_master(student_code), CONSTRAINT fk_staff1 foreign key(staff_code) REFERENCES STAFF_MASTER(STAFF_CODE));
+table created
+1.select Ename as name, Design_code as Designation_code from Emp, Designation_Master where hierdate > '01-jan-2003' and sal between 12000 and 25000;
+
+NAME       DESIGNATION_CODE
+---------- ----------------
+siya                      1
+siya                      2
+siya                      3
+shaurya                   1
+shaurya                   2
+shaurya                   3
+
+6 rows selected.
+2.SELECT STAFF_CODE,STAFF_NAME,DEPT_CODE FROM STAFF_MASTER WHERE (MONTHS_BETWEEN(SYSDATE,HIERDATE))>=18  ORDER BY HIERDATE DESC;
+
+STAFF_CODE STAFF_NAME                                          DEPT_CODE
+---------- -------------------------------------------------- ----------
+      1302 DEV                                                         1
+      1301 Eshwar                                                      2
+      1303 DEVI                                                        1
+
+3.select * from Emp where mgr is null;
+
+     EMPNO ENAME      JOB              MGR HIERDATE         SAL       COMM
+---------- ---------- --------- ---------- --------- ---------- ----------
+    DEPTNO
+----------
+       105 shaurya    deploy               28-SEP-04      20000      31544
+         1
+
+       106 Vir_ya     team                 24-APR-99      25000      35411
+         2
+4. select * from Book_master where book_pub_year between 2001 and 2004 and book_pub_author like '%&%';
+
+ BOOK_CODE BOOK_NAME            BOOK_PUB_YEAR
+---------- -------------------- -------------
+BOOK_PUB_AUTHOR
+--------------------------------------------------
+  12564789 SE                            2001
+Auth&or6
+5. select Ename from Emp where Ename like '%\_%' escape '\';
+
+ENAME
+----------
+Vir_ya
+-----------------------------------------------------------------------------------------------------------------------------------------
+2.1 Single Row Functions
+1.select Staff_name , lpad('$'||Staff_sal,15,' ')  as salary from staff_master;
+
+STAFF_NAME
+--------------------------------------------------
+SALARY
+------------------------------------------------------------
+Eshwar
+         $50000
+
+DEV
+         $50000
+2. select student_name as name, TO_CHAR(student_dob, 'MONTH DD YYYY') as dob from student_master where TO_CHAR(student_dob,'DAY') LIKE '% SATURDAY%' OR TO_CHAR(student_dob,'DAY') LIKE '%SUNDAY%';
+
+NAME
+--------------------------------------------------
+DOB
+--------------------------------------------
+vani
+DECEMBER  06 1998
+3.select staff_name, ROUND(MONTHS_BETWEEN(SYSDATE,HIERDATE)) AS MONTHS_WORKED from staff_master ORDER BY ROUND(MONTHS_BETWEEN(SYSDATE,HIERDATE));
+
+STAFF_NAME                                         MONTHS_WORKED
+-------------------------------------------------- -------------
+DEVI                                                           1
+DEV                                                          115
+Eshwar                                                       128
+
+4.select * from staff_master where TO_CHAR(HIERDATE,'DD') BETWEEN 1 AND 15 AND TO_CHAR(HIERDATE,'MONTH') LIKE '%DECEMBER%';
+
+STAFF_CODE STAFF_NAME                                         DESIGN_CODE
+---------- -------------------------------------------------- -----------
+ DEPT_CODE HIERDATE  STAFF_DOB
+---------- --------- ---------
+STAFF_ADDRESS
+--------------------------------------------------------------------------------
+       MGR  STAFF_SAL
+---------- ----------
+      1303 DEVI                                                         2
+         1 12-DEC-19 02-DEC-82
+h.no: 2-6-6/80p,Banlagunda
+      1303      50000
+
+
+STAFF_CODE STAFF_NAME                                         DESIGN_CODE
+---------- -------------------------------------------------- -----------
+ DEPT_CODE HIERDATE  STAFF_DOB
+---------- --------- ---------
+STAFF_ADDRESS
+--------------------------------------------------------------------------------
+       MGR  STAFF_SAL
+---------- ----------
+      1304 Indra                                                        2
+         3 12-DEC-02 18-AUG-80
+H.no:2-9-8, kalimandir
+      1003      55000
+5. select staff_name, staff_sal as salary,
+  2  case
+  3  WHEN STAFF_SAL >=50000 THEN 'A'
+  4  WHEN STAFF_SAL  >25000 AND  STAFF_SAL<50000 THEN 'B'
+  5  WHEN STAFF_SAL  >10000 AND  STAFF_SAL<25000 THEN 'C'
+  6  ELSE 'D'
+  7  END CASE
+  8  from staff_master;
+
+STAFF_NAME                                             SALARY C
+-------------------------------------------------- ---------- -
+Eshwar                                                  50000 A
+DEV                                                     50000 A
+DEVI                                                    50000 A
+Indra                                                   55000 A
+
+6.select staff_name,hierdate , TO_CHAR(hierdate,'DY') AS day from staff_master ORDER BY TO_CHAR(hierdate,'D');
+
+STAFF_NAME                                         HIERDATE  DAY
+-------------------------------------------------- --------- ------------
+Eshwar                                             13-MAY-09 WED
+Indra                                              12-DEC-02 THU
+DEVI                                               12-DEC-19 THU
+DEV                                                12-JUN-10 SAT
+
+7.select INSTR('Mississippi', 'i',1,3) FROM dual;
+
+INSTR('MISSISSIPPI','I',1,3)
+----------------------------
+                           8
+
+8.SELECT TO_CHAR(NEXT_DAY(SYSDATE,'FRIDAY'),'DD MONTH ,YYYY') AS DAY FROM DUAL;
+
+DAY
+---------------------------------------------
+31 JANUARY   ,2020
+
+9.select student_code, student_name as name, DECODE(DEPTNO, 2,'Electricals', 3,'Electronics','others') Dept_name from student_master;
+
+STUDENT_CODE NAME                                               DEPT_NAME
+------------ -------------------------------------------------- -----------
+        1201 vena                                               others
+        1202 vani                                               Electricals
+        1203 rani                                               Electronics
+======================================================================================================================================================================================================
+2.2 GROUP FUNCTIONS
+
+1. select  ROUND(MAX(staff_sal)) AS MAXIMUM,ROUND(MIN(staff_sal)) AS MINIMUM,ROUND(SUM(STAFF_SAL)) AS TOTAL, ROUND(AVG(STAFF_SAL)) AS AVERAGE FROM staff_master GROUP BY dept_code;
+ MAXIMUM    MINIMUM      TOTAL    AVERAGE
+---------- ---------- ---------- ----------
+     50000      50000     100000      50000
+     50000      50000      50000      50000
+     55000      55000      55000      55000
+
+2.select deptno, count(mgr) as total_number_of_mgr from emp group by deptno;
+
+    DEPTNO TOTAL_NUMBER_OF_MGR
+---------- -------------------
+         1                   1
+         2                   1
+         3                   2
+
+3.   select deptno, sum(sal) from emp where JOB NOT IN ('manager')  GROUP BY DEPTNO having sum(sal)>20000;
+
+    DEPTNO   SUM(SAL)
+---------- ----------
+         1      60000
+         2      55000
+         3      25000
+============================================================================================================================================================================================================================
+3.1 JOINS AND QUERIES
+
+1.select s.staff_name, d.Dept_code as Department_code, d.dept_name AS Department_name, s.staff_sal as salary from Staff_master s, Deprtment_master1 d where s.dept_code =d.dept_code and staff_sal > 20000;
+
+STAFF_NAME                                         DEPARTMENT_CODE
+-------------------------------------------------- ---------------
+DEPARTMENT_NAME                                        SALARY
+-------------------------------------------------- ----------
+DEVI                                                             1
+IT                                                      50000
+
+DEV                                                              1
+IT                                                      50000
+
+Eshwar                                                           2
+CSE                                                     50000
+
+
+STAFF_NAME                                         DEPARTMENT_CODE
+-------------------------------------------------- ---------------
+DEPARTMENT_NAME                                        SALARY
+-------------------------------------------------- ----------
+Indra                                                            3
+EEE                                                     55000
+
+
+2.select s.staff_code as staff#, s.staff_name as staff, d.Dept_name, s.mgr as mgr# from staff_master s, deprtment_master1 d where d.dept_code = s.dept_code;
+
+    STAFF# STAFF
+---------- --------------------------------------------------
+DEPT_NAME                                                MGR#
+-------------------------------------------------- ----------
+      1303 DEVI
+IT                                                       1303
+
+      1302 DEV
+IT                                                       1002
+
+      1301 Eshwar
+CSE                                                      1001
+
+
+    STAFF# STAFF
+---------- --------------------------------------------------
+DEPT_NAME                                                MGR#
+-------------------------------------------------- ----------
+      1304 Indra
+EEE                                                      1003
+
+3.select bt.student_code, s.student_name, bt.book_code, b.book_name from book_master b, student_master s, book_transaction bt where bt.book_code = b.book_code and bt.student_code = s.student_code and bt.book_expected_return_date = '25-jan-2020';
+
+STUDENT_CODE STUDENT_NAME                                        BOOK_CODE
+------------ -------------------------------------------------- ----------
+BOOK_NAME
+--------------------
+        1201 vena                                                 12564789
+SE
+
+4.select bt.staff_code, s.staff_name, dt.dept_name, d.Design_name as Designation_name, bt.book_code, b.book_name, bt.book_issue_date from designation_master d, book_transaction bt, deprtment_master1 dt, book_master b, staff_master s where s.staff_code = bt.staff_code and dt.dept_code = s.dept_code and bt.book_code = b.book_code and s.design_code = d.design_code and book_issue_date BETWEEN'24-DEC-2019' AND  '24-JAN-2020';
+
+STAFF_CODE STAFF_NAME
+---------- --------------------------------------------------
+DEPT_NAME
+--------------------------------------------------
+DESIGNATION_NAME                                    BOOK_CODE
+-------------------------------------------------- ----------
+BOOK_NAME            BOOK_ISSU
+-------------------- ---------
+      1302 DEV
+IT
+Shruthi                                              12564789
+SE                   15-JAN-20
+
+5.select s.staff_code, s.staff_name, d.design_name, dt.dept_name, bt.book_code, b.book_name, b.book_pub_author, 5*(SYSDATE - bt.book_expected_return_date) as fine from book_transaction bt, staff_master s, designation_master d, deprtment_master1 dt, book_master b where s.staff_code = bt.staff_code and dt.dept_code = s.dept_code and bt.book_code = b.book_code and s.design_code= d.design_code and (TO_CHAR(bt.book_ACTUAL_return_date, 'DD') - TO_CHAR(BOOK_EXPECTED_RETURN_DATE,'DD')) > 1;
+
+6.select staff_code, staff_name, staff_sal as salary from staff_master where staff_sal < (select avg(staff_sal) from staff_master);
+
+STAFF_CODE STAFF_NAME                                             SALARY
+---------- -------------------------------------------------- ----------
+      1301 Eshwar                                                  50000
+      1302 DEV                                                     50000
+      1303 DEVI                                                    50000
+
+7.
+========================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+4.1 DATABASE OBJECTS
+
+1. CREATE TABLE CUSTOMER (CUSTOMER_ID NUMBER(5), CUST_NAME VARCHAR(20), ADDRESS1 VARCHAR2(30), ADDRESS2 VARCHAR2(30));
+
+Table created.
+
+2.  ALTER TABLE CUSTOMER MODIFY CUST_NAME VARCHAR2(30) NOT NULL;
+
+Table altered.
+2.  ALTER TABLE CUSTOMER RENAME COLUMN CUST_NAME TO CUSTOMER_NAME;
+
+Table altered.
+
+3a. ALTER TABLE CUSTOMER ADD ( GENDER VARCHAR2(1) , AGE NUMBER(3), PHONE_NO NUMBER(10));
+
+Table altered.
+
+3b.ALTER TABLE CUSTOMER RENAME TO CUST_TABLE;
+
+Table altered.
+4.Insert into cust_table values (1000, 'Allen', '#115 Chicago', '#115 Chicago', 'M', 25,7878776);
+
+1 row created.
+
+SQL> Insert into cust_table values (1001, 'George', '#116 France', '#116 France', 'M', 25, 434524);
+
+1 row created.
+Insert into cust_table values (1002, 'Becker', '#114 New York', '#114 New York', 'M', 45, 431525);
+
+1 row created.
+
+5.ALTER TABLE CUST_TABLE ADD CONSTRAINT CUST_PK PRIMARY KEY (CUSTOMER_ID);
+
+Table altered.
+
+6. Insert into cust_table values (1002, 'John', '#114 Chicago', '#114 Chicago', 'M', 45, 439525);
+Insert into cust_table values (1002, 'John', '#114 Chicago', '#114 Chicago', 'M', 45, 439525)
+*
+ERROR at line 1:
+ORA-00001: unique constraint (MSUREKHA.CUST_PK) violated
+
+7. ALTER TABLE CUST_TABLE DISABLE CONSTRAINT CUST_PK ;
+
+Table altered.
+
+SQL> Insert into cust_table values (1002, 'Becker', '#114 New York', '#114 New york ', 'M', 45, 431525);
+
+1 row created.
+
+SQL> Insert into cust_table values (1003, 'Nanapatekar', '#115 India', '#115 India' , 'M', 45, 431525);
+
+1 row created.
+8.ALTER TABLE CUST_TABLE ENABLE CONSTRAINT CUST_PK ;
+ALTER TABLE CUST_TABLE ENABLE CONSTRAINT CUST_PK
+*
+ERROR at line 1:
+ORA-02437: cannot validate (MSUREKHA.CUST_PK) - primary key violated
+
+9.  ALTER TABLE CUST_TABLE DROP CONSTRAINT CUST_PK ;
+
+Table altered.
+
+10. TRUNCATE TABLE CUST_TABLE;
+
+Table truncated.
+11. ALTER TABLE CUST_TABLE ADD ( E_MAIL VARCHAR2(50));
+
+Table altered.
+
+12.ALTER TABLE CUST_TABLE DROP COLUMN E_MAIL;
+
+Table altered.
+
+13.CREATE TABLE SUPPLIERS_TABLE (SUPPID NUMBER(5), SNAME VARCHAR2(20), ADDR1 VARCHAR2(20), ADDR2 VARCHAR2(30), CONTACTNO NUMBER(10))
+  2  ;
+
+Table created.
+
+14.DROP TABLE SUPPLIERS_TABLE;
+
+Table dropped.
+
+SQL> select * from SUPPLIERS_table
+  2  ;
+select * from SUPPLIERS_table
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+create table Customer_Master ( CustomerId number(5), CustomerName varchar2(30) NOT NULL, Address1 varchar2(30) NOT NULL, Gender varchar2(1), Age number(3), PhoneNo number(10), CONSTRAINT  CustId_PK PRIMARY KEY (CustomerId));
+
+Table created.
+
+15.create table Accounts_Master ( CustomerId number(5), Account_Number number(10,2), Account_Type char(3), Ledger_Balance number(10,2) NOT NULL, CONSTRAINT Acc_PK PRIMARY KEY (Account_number), CONSTRAINT Acc_FK FOREIGN KEY( CustomerId) REFERENCES Customer_master(CUSTOMERID));
+
+Table created.
+
+16.ALTER TABLE ACCOUNTS_MASTER RENAME  CONSTRAINT ACC_FK TO CUST_ACC;
+
+Table altered.
+
+17. INSERT INTO CUSTOMER_MASTER VALUES (1000, 'Allen', '#115 Chicago', 'M', 25, 7878776,'#115 Chicago');
+
+1 row created.
+
+SQL> INSERT INTO CUSTOMER_MASTER VALUES (1001, 'George', '#116 France','M', 25, 434524, '#116 France');
+
+1 row created.
+
+SQL> INSERT INTO CUSTOMER_MASTER VALUES (1002, 'Becker', '#114 New York', 'M', 45, 431525,' #114 New York');
+
+1 row created.
+
+18.ALTER TABLE ACCOUNTS_MASTER ADD CONSTRAINT CK_AC CHECK(ACCOUNT_TYPE ='NRI' OR ACCOUNT_TYPE = 'IND');
+
+Table altered.
+
+19.ALTER TABLE ACCOUNTS_MASTER ADD CONSTRAINT Balance_Check check( Ledger_Balance > 5000);
+
+Table altered.
+
+20.delete from Customer_Master where customerid =1001;
+
+1 row deleted.
+
+SQL> select * from accounts_master where customerid=1001;
+
+no rows selected
+
+21.create table AccountDetails AS  select * from Accounts_master;
+
+Table created.
+
+22.CREATE VIEW Acc_view AS select CustomerId as CustomerCode, Account_type as Type, Ledger_Balance as Balance from  Accounts_master;
+
+View created.
+
+23.create view vAccs_Dtls as select * from Accounts_master where Account_type = 'IND' and ledger_balance > 10000;
+
+View created.
+
+24.
+
+25.create sequence Seq_Dept
+  2  MINVALUE 1
+  3  MAXVALUE 200
+  4  START WITH 40
+  5  INCREMENT BY 10
+  6  CACHE 40;
+
+Sequence created.
+
+26. create table departmentmaster(deptno number(38),Dname varchar2(25),location varchar2(25));
+
+Table created.
+insert into departmentmaster  values(seq_dept.NEXTVAL,'RESEARCH','BOSTON');
+
+1 row created.
+
+SQL> insert into departmentmaster  values(seq_dept.NEXTVAL,'MARKETING','NEW DELHI');
+
+1 row created.
+
+SQL> insert into departmentmaster  values(seq_dept.NEXTVAL,'SALES','chennai');
+
+1 row created.
+
+27. DROP SEQUENCE SEQ_DEPT;
+
+Sequence dropped.
+
+28. CREATE INDEX No_Name ON Emp(Ename);
+
+Index Created
+
+29. create SYNONYM synEmp for Emp;
+
+Synonym created.
+
+30. select * from synemp;
+
+     EMPNO ENAME      JOB              MGR HIERDATE         SAL       COMM
+---------- ---------- --------- ---------- --------- ---------- ----------
+    DEPTNO
+----------
+       101 Priya      developer       1001 10-MAR-01      40000      12345
+         1
+
+       102 Riya       tester          1002 13-MAY-02      30000      15642
+         2
+
+       103 siya       analyst         1003 13-SEP-03      25000      21546
+         3
+
+
+     EMPNO ENAME      JOB              MGR HIERDATE         SAL       COMM
+---------- ---------- --------- ---------- --------- ---------- ----------
+    DEPTNO
+----------
+       104 surya      manager         1004 24-APR-00      50000      21544
+         3
+
+       105 shaurya    deploy               28-SEP-04      20000      31544
+         1
+
+       106 Vir_ya     team                 24-APR-99      25000      35411
+         2
+
+
+6 rows selected.
+
+31. CREATE INDEX idx_emp_hiredate ON Emp(Hierdate);
+
+Index created.
+
+32. SQL> CREATE sequence SEQ_EMP minvalue 1001 start with 1001
+  2  increment by 1 cache 1001;
+
+Sequence created.
+
+SQL>
+
+========================================================================================================================================================================================================================================
+5.1 DATA MANIPULATION
+
+
+1. Create table employee as select * from emp where 1=3;
+
+Table created.
+
+SQL> desc employee;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO                                     NOT NULL NUMBER(4)
+ ENAME                                              VARCHAR2(10)
+ JOB                                                VARCHAR2(9)
+ MGR                                                NUMBER(4)
+ HIERDATE                                           DATE
+ SAL                                                NUMBER(7,2)
+ COMM                                               NUMBER(7,2)
+ DEPTNO                                             NUMBER(2)
+
+SQL> select * from employee;
+
+no rows selected
+
+2.
+
+3.update emp set job = ( select job from emp where empno = 7788 ), deptno = (select deptno from emp where empno = 7788) where empno = 7698;
+
+1 row updated.
+
+4. insert into emp (empno,ename,job,mgr,hierdate,sal,comm,deptno) values (1000,'Allen', 'Clerk',1001,'12-jan-01', 3000, 2,10);
+
+1 row created.
+
+SQL> insert into emp (empno,ename,job,mgr,hierdate,sal,comm,deptno) values (1001,'George', 'analyst', null, '08 Sep 92', 5000,0, 10);
+
+1 row created.
+
+SQL> insert into emp (empno,ename,job,mgr,hierdate,sal,comm,deptno) values (1002, 'Becker', 'Manager', 1000, '4 Nov 92', 2800,4, 20);
+
+1 row created.
+
+SQL> insert into emp (empno,ename,job,mgr,hierdate,sal,comm,deptno) values (1003, 'Bill', 'Clerk', 1002, '4 Nov 92',3000, 0, 20);
+
+1 row created.
+
+5.update emp set deptno = (select deptno from emp where empno = 7788) where empno = 7698;
+
+1 row updated.
+=====================================================================================================================================================================================================================================================================================================
+6.1 Transaction Control Language Statements
+
+1.insert into customer_master(customerid,customername,Address1,gender,age,phoneno,address2) values (6000, 'John', '#115 Chicago', 'M', 25, 7878776,'#115 Chicago');
+
+1 row created.
+
+SQL> insert into customer_master(customerid,customername,Address1,gender,age,phoneno,address2) values (6001, 'Jack', '#116 France', 'M', 25, 434524, '#116 France');
+
+1 row created.
+
+SQL> insert into customer_master(customerid,customername,Address1,gender,age,phoneno,address2) values (6002, 'James', '#114 New York', 'M', 45, 431525, '#114 New York');
+
+1 row created.
+
+
+2.SAVEPOINT SP1;
+
+Savepoint created.
+
+3.  insert into customer_master(customerid,customername,Address1,gender,age,phoneno,address2) values ( 6003, 'John', '#114 Chicago',  'M', 45, 439525,'#114 Chicago');
+
+1 row created.
+
+4.ROLLBACK;
+
+Rollback complete.
+
+ select * from CUSTOMER_MASTER;
+
+CUSTOMERID CUSTOMERNAME                   ADDRESS1                       G
+---------- ------------------------------ ------------------------------ -
+       AGE    PHONENO ADDRESS2
+---------- ---------- ------------------------------
+      1000 Allen                          #115 Chicago                   M
+        25    7878776 #115 Chicago
+
+      1002 Becker                         #114 New York                  M
+        45     431525  #114 New York
