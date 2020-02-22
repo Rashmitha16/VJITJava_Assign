@@ -1,0 +1,266 @@
+2.1Write a java program to print person details in the format as shown below:
+package lab2;
+public class PersonDetails {
+    private String firstname;
+    private String lastname;
+    private char gender;
+    private int age;
+    private double weight;
+    PersonDetails()
+    {
+    	firstname ="Divya";
+    	lastname="Bharathi";
+    	gender = 'F';
+    	age=20;
+    	weight=85.55;
+
+    }
+    public static void main(String args[])
+    {
+    	PersonDetails p = new PersonDetails();
+    	System.out.println("Firstname is " + p.firstname);
+    	System.out.println("Lastname is " + p.lastname);
+    	System.out.println("gender is " + p.gender);
+    	System.out.println("Age is " + p.age);
+    	System.out.println("Weight is " + p.weight);
+    }
+    
+	
+}
+
+2.2Write a program to accept a number from user as a command line argument and check whether the given number is positive or negative number.
+package lab2;
+
+public class CheckNumber {
+
+	public static void main(String[] args) {
+		
+        int num = Integer.parseInt(args[0]);
+        if(num > 0)
+        {
+        	System.out.println("It is a positive number");
+        }
+        else if(num<0)
+        {
+        	System.out.println("It is a negative number");
+        }
+        else
+        {
+        	System.out.println("It is a zero");
+        }
+	}
+
+}
+
+2.3Refer the class diagram given below and create person class.
+package lab2;
+public class PersonClass {
+
+	String firstname;
+	String lastname;
+	char gender;
+	String phonenum;
+	PersonClass()
+	{
+	  firstname="preethi";
+	  lastname="reddy";
+      gender='F';
+      phonenum="9963018008";
+	}
+	PersonClass(String firstname,String lastname,char gender,String phonenum)
+	{
+		this.firstname=firstname;
+		this.lastname=lastname;
+		this.gender=gender;
+		this.phonenum=phonenum;
+	}
+	public String getFirstname() {
+		return firstname;
+	}
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+	public String getLastname() {
+		return lastname;
+	}
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+	public char getGender() {
+		return gender;
+	}
+	public void setGender(char gender) {
+		this.gender = gender;
+	}
+	public String getPhonenum() {
+		return phonenum;
+	}
+	public void setPhonenum(String phonenum) {
+		this.phonenum = phonenum;
+	}
+	public static void main(String[] args) {
+		
+
+	}
+
+}
+package lab2;
+
+public class Person {
+
+	public static void main(String[] args) {
+		PersonClass p1= new PersonClass();
+		System.out.println("Personal Details");
+		System.out.println("-----------------");
+		System.out.println("Firstname " + p1.firstname);
+		System.out.println("Firstname " + p1.lastname);
+		System.out.println("gender " + p1.gender);
+		System.out.println("gender " + p1.phonenum);
+		PersonClass p2= new PersonClass("rashu","akkaldevi",'F',"9985654455");
+		System.out.println("-----------------");
+		System.out.println("Firstname " + p2.getFirstname());
+		System.out.println("Firstname " + p2.getLastname());
+		System.out.println("gender " + p2.getGender());
+		System.out.println("gender " + p2.getPhonenum());
+
+	}
+
+}
+
+
+2.4: Modify Lab assignment 2.3 to accept phone number of a person. Create a new method to implement the same and also define method for displaying person details. 
+package lab2;
+
+class Person3
+{
+		private String Fname;
+		private String Lname;
+		private char gender;
+		private int age;
+		private double weight;
+		private long number;
+
+
+	Person3(String Fname,String Lname,char gender,int age,double weight,long number)
+	    {
+			 this.Fname=Fname;
+			 this.Lname=Lname;
+			 this.gender=gender;
+			 this.age=age;
+			 this.weight=weight;
+			 this.number=number;
+		}
+		
+		public long getNumber() {
+			return number;
+		}
+
+		public void setNumber(long number) {
+			this.number = number;
+		}
+
+		public String getFname() {
+			return Fname;
+		}
+		public void setFname(String fname) {
+			this.Fname = fname;
+		}
+		public String getLname() {
+			return Lname;
+		}
+		public void setLname(String lname) {
+			this.Lname = lname;
+		}
+		public char getGender() {
+			return gender;
+		}
+		public void setGender(char gender) {
+			this.gender = gender;
+		}
+		public int getAge() {
+			return age;
+		}
+		public void setAge(int age) {
+			this.age = age;
+		}
+		public double getWeight() {
+			return weight;
+		}
+
+		
+		public void setWeight(double weight) {
+			this.weight = weight;
+		}
+	 
+	}
+class Person4 {
+		
+			public static void main(String[] args){
+				Person3 p=new Person3("Preethi", "Reddy",'F',20,85.55,994831599) ;
+				
+				System.out.println("First name:"+p.getFname());
+				System.out.println("Last name:"+p.getLname());
+				System.out.println("Age:"+p.getAge());
+				System.out.println("Gender:"+p.getGender());
+				System.out.println("Weight:"+p.getWeight());	
+				System.out.println("number:"+p.getNumber());
+			}
+	}
+
+2.5Modify the above program, to accept only ‘M’ or ‘F’ as gender field values. Use Enumeration for implementing the same.
+package lab2;
+
+public class PersonEnum {
+	public enum Gender {
+	    M,
+	    F
+	}
+	String firstname;
+	String lastname;
+	String phonenum;
+	public Gender gender;
+	PersonEnum(String firstname,String lastname,String phonenum,Gender gender)
+	{
+		this.firstname=firstname;
+		this.lastname=lastname;
+		this.phonenum=phonenum;
+		this.gender=gender;
+	}
+	public String getFirstname() {
+		return firstname;
+	}
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+	public String getLastname() {
+		return lastname;
+	}
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+	public String getPhonenum() {
+		return phonenum;
+	}
+	public void setPhonenum(String phonenum) {
+		this.phonenum = phonenum;
+	}	
+	 public Gender getGender() {
+	        return gender;
+	    }
+
+	    public void setGender(Gender gender) 
+	    {
+	        this.gender = gender;
+	    }   
+	public static void main(String[] args) {
+		PersonEnum p1= new PersonEnum("Preethi","Reddy","9985654455",Gender.F);
+		System.out.println("-----------------");
+		System.out.println("Firstname " + p1.getFirstname());
+		System.out.println("Lasttname " + p1.getLastname());
+		System.out.println("gender " + p1.getGender());
+		System.out.println("Phonenumber " + p1.getPhonenum());
+		
+	}
+
+}
+

@@ -1,0 +1,367 @@
+3.1Create a method which can perform a particular String operation based on the user’s choice. 
+The method should accept the String object and the user’s choice and return the output of the operation
+package lab3;
+
+import java.util.Scanner;
+public class UserChoice {
+
+	
+	public void operations(int choice)
+	{
+		String s1=new String("PREETHI");
+		 StringBuilder sb = new StringBuilder(s1);
+		String s =new String();
+		
+		switch(choice)
+		{
+		case 1:
+		{
+			s1=s1+s1;
+		 System.out.println("added string is " + s1);
+		 break;
+		}
+		case 2:
+		{
+			StringBuilder sb1 = new StringBuilder(s1);
+			
+			for (int i = 0; i < sb1.length(); i++) {
+			    
+			        if (i % 2 !=0) {
+			            sb1.setCharAt(i, '#');
+			        }
+			}
+			System.out.println(sb1);
+			break;
+	     }
+		case 3:
+		{
+			for (int i = 0; i <s1.length(); i++) {
+		        if(!s.contains(String.valueOf(s1.charAt(i)))) {
+		            s += String.valueOf(s1.charAt(i));
+		        }
+			}
+	    	 System.out.println(s);
+	    	 break;
+		}
+		case 4:
+		{
+			for (int i = 0; i < s1.length(); i++) {
+				char ch = s1.charAt(i);
+		        if (i % 2 !=0) {
+		        	System.out.println(Character.toLowerCase(ch));
+		        }
+		        else {
+		            System.out.print(Character.toUpperCase(ch));
+		        	}
+		        
+			}
+		}
+	}
+}
+		
+public static void main(String args[])
+	{
+		
+		UserChoice cr = new UserChoice();
+		Scanner sc = new Scanner(System.in);
+		int choice = sc.nextInt();
+		cr.operations(choice);
+			
+	}	
+}
+
+3.2Create a method that accepts a String and checks if it is a positive string.
+ A string is considered a positive string, if on moving from left to right each character in the String comes after the previous characters in the Alphabetical order. 
+package lab3;
+
+import java.util.Arrays;
+
+public class CheckString {
+		static boolean Sorted(String s) 
+		{ 
+			int n = s.length(); 
+			char c[] = new char [n];
+			for (int i = 0; i < n; i++) { 
+				c[i] = s.charAt(i); 
+			}
+			Arrays.sort(c); 
+			for (int i = 0; i < n; i++) 
+				if (c[i] != s.charAt(i)) 
+					return false; 
+					
+			return true;	 
+		} 
+		
+		public static void main(String args[]) 
+		{ 
+			String s = "prs";
+			if (Sorted(s)) 
+			System.out.println("Yes"); 
+			else
+				System.out.println("No"); 
+				
+		} 
+	
+}
+
+3.3Create a method to accept date and print the duration in days, months and years with regards to current system date. 
+package lab3;
+import java.time.*;
+public class DateDuration {
+	public void duration()
+    {
+   	 LocalDate pdate = LocalDate.of(2014,12,11);
+        LocalDate now = LocalDate.now();
+ 
+        Period dur = Period.between(pdate, now);
+       System.out.printf("\nDuration is %d years, %d months and %d days old\n\n",dur.getYears(), dur.getMonths(), dur.getDays());
+    }
+      public static void main(String[] args)
+   {
+       DateDuration d = new DateDuration();
+       d.duration();
+    
+    
+   }
+}
+
+3.4: Revise exercise 3.3 to accept two Local Dates and print the duration between dates in days, months and years
+package lab3;
+import java.time.*;
+public class DateDifference {
+	public void localdur()
+    {
+   	 LocalDate pdate = LocalDate.of(2014,12,11);
+	        LocalDate after= LocalDate.of(2016, 03, 18);
+	        /*return ChronoUnit.DAYS.between(pdate, after);*/
+	        Period dur = Period.between(pdate, after);
+	       System.out.printf("\nDuration is %d years, %d months and %d days old\n\n",dur.getYears(), dur.getMonths(), dur.getDays());
+    }
+      public static void main(String[] args)
+   {
+       DateDifference d = new DateDifference();
+       d.localdur();
+    
+    
+   }
+}
+
+3.5Create a method to accept product purchase date and warrantee period (in terms of months and years). Print the date on which warrantee of product expires.
+package lab3;
+import java.text.*;
+import java.time.*;
+import java.util.*;
+
+public class ProductWarantee {
+
+ 
+
+              public static void main(String[] args) {
+
+                           // TODO Auto-generated method stub
+
+                           System.out.println("ENTER DATE IN FORMAT YYYY,MM,DD");
+
+                           Scanner sc=new Scanner(System.in);
+
+                           int year =sc.nextInt();
+
+                           int month =sc.nextInt();
+
+                           int dayOfMonth =sc.nextInt();
+
+                           LocalDate loc=LocalDate.of(year, month, dayOfMonth);
+
+                           System.out.println("enter expiry in format YY,MM");
+
+                           int year1 =sc.nextInt();
+
+                           int month1 =sc.nextInt();
+
+                           LocalDate l=loc.plusYears(year1);
+
+                           LocalDate l1=loc.plusMonths(month1);
+
+                           //LocalDate lll=LocalDate.of(year1, month1, dayOfMonth);
+
+                           /*          System.out.println("enter other date");
+
+                           int year1 =sc.nextInt();
+
+                           int month1 =sc.nextInt();
+
+                           int dayOfMonth1 =sc.nextInt();
+
+                           LocalDate l=LocalDate.of(year1, month1, dayOfMonth1);
+
+                           Period p=Period.between(loc, l);
+
+                           System.out.println(l);
+
+                           System.out.println("The difference of years"+p.getYears()+",months"+p.getMonths()+"days"+p.getDays());
+
+                           */
+
+                           int m=l.getMonthValue();
+
+                           int n=l.getYear();
+
+switch(m){
+
+case 2:
+
+              if(loc.getDayOfMonth()==29||loc.getDayOfMonth()==30||loc.getDayOfMonth()==31){
+
+                           dayOfMonth=1;
+
+                           m=3;
+
+              		}
+
+              break;
+
+case 4:
+
+              if(loc.getDayOfMonth()==31){
+
+                           dayOfMonth=1;
+
+                           m=5;
+
+              }
+
+              break;
+
+case 6:
+
+              if(loc.getDayOfMonth()==31){
+
+                           dayOfMonth=1;
+
+                           m=7;
+
+              }
+
+              break;
+
+case 9:
+
+              if(loc.getDayOfMonth()==31){
+
+                           dayOfMonth=1;
+
+                           m=10;
+
+              }
+
+              break;
+
+case 11:
+
+              if(loc.getDayOfMonth()==31){
+
+                           dayOfMonth=1;
+
+                           m=12;
+
+              }
+
+              break;
+
+}
+
+LocalDate loc1=LocalDate.of(n, m, dayOfMonth);
+
+System.out.println(loc1);
+
+              }
+
+ }
+
+3.6Create a method which accept zone id and print the current date and time with respect to given zone.
+package lab3;
+
+import java.time.*;
+public class TimeZone {
+
+	public void zone()
+	{
+		ZoneId id = ZoneId.systemDefault();
+		ZonedDateTime c = ZonedDateTime.now(id);
+		System.out.println("Time Zone is " + id);
+		System.out.println("Date and Time for current Zone is " + c);
+
+	}
+	public static void main(String[] args) {
+	TimeZone z = new TimeZone();
+	z.zone();
+
+	}
+
+}
+
+3.7Modify Lab assignment 2.3 to perform following functionalities:
+a)	Add a method called calculateAge which should accept person’s date of birth and calculate age of a person. 
+b)	Add a method called getFullName(String firstName, String lastName) which should return full name of a person
+   	Display person details with age and fullname.
+
+package lab3;
+
+import java.util.Scanner;
+class CheckAge {
+	int age;
+public int getAge() {
+		return age;
+	}
+public void setAge(int age) {
+		this.age = age;
+	}
+
+
+public String getFullName(String firstName,String lastname){
+		String fullname=firstName+lastname;
+		return fullname;
+		
+	}
+	
+
+	public static void main(String[] args) {
+		//Person p=new Person("karthik","Gupta",'M');
+
+		Scanner sc=new Scanner(System.in);
+		CheckAge p=new CheckAge();
+		System.out.println("Enter first name");
+		String firstName=sc.nextLine();
+		System.out.println("Enter Second name");
+		String lastName=sc.nextLine();
+		System.out.println("Enter Age of Person");
+		int age=sc.nextInt();
+		p.setAge(age);
+	   String result=p.getFullName(firstName,lastName);
+	   System.out.println(result);
+        sc.close();
+        
+        try {
+    		if(p.age<18) {
+    			throw new AgeException("Age should be greater than 18");
+    					}
+    		}
+    		catch(AgeException e) {
+    			System.out.println(e.toString());
+    		}
+    	
+	}
+
+}
+
+
+class AgeException extends Exception{
+	String str;
+	AgeException(String str){
+		this.str = str;
+	}
+	public String toString() {
+		return "Exception : "+this.str;
+	}
+}
+

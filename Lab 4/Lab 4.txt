@@ -1,0 +1,224 @@
+4.1Refer the case study 1in Page No: 5 and create Account Class as shown below in class diagram.
+ Ensure minimum balance of INR 500 in a bank account is available
+
+package lab4;
+
+import java.util.*;
+public class  Account
+{
+	public long accnum;
+	public String name;
+	public static double balance=500;
+	public float age;
+
+	public Account(){}
+	
+	public Account(String name,float age,long accnum)
+	{
+		this.name = name; 
+		this.accnum=accnum;
+		this.age=age;
+		//this.balance=balance;
+  	}
+	
+	/*public Account(String name, int age) {
+				this.name=name;
+				this.age=age;
+	}*/
+
+	public void setBalance(double balance) {
+		this.balance = this.balance+balance;
+	}
+	public double getbalance()
+	{
+		return balance;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public float getAge() {
+		return age;
+	}
+	public void setAge(float age) {
+		this.age = age;
+	}
+	
+	public long getAccnum() {
+		return accnum;
+	}
+	public void setAccnum(long accnum) {
+		this.accnum = accnum;
+	}
+
+	public void withdraw(double withdrawAmount)
+	{
+		balance = balance - withdrawAmount;
+	}
+	public void deposit(double depositAmount)
+	{        
+         if (depositAmount > 0)    
+            balance += depositAmount;
+	}	
+	public static void main(String args[])
+	{
+		//Account a = new Account("Preethi",21,1916);
+		//a.withdraw(200);
+		/*Scanner input = new Scanner(System.in);
+		Account a = new Account();	
+		System.out.print("Enter How much you want to withdraw : ");
+		int withdraw = input.nextInt();
+		System.out.print("Enter Account Holder name : ");
+		String name = input.next(); 
+		System.out.print("Enter Age of  Account Holder name : ");
+		int age = input.nextInt();
+		System.out.print("Enter Account Number : ");
+	    long accnum = input.nextLong();
+		System.out.println("Enter the amount of balance");
+		double balance = input.nextDouble();
+		a.setBalance(balance);
+		a.withdraw(withdraw);
+		a.setName(name);
+		a.setAccnum(accnum);
+		a.setAge(age);*/
+		
+		/*
+		System.out.println("\n");
+		System.out.println("-----------------------------------------");
+		System.out.println("The name of the AccountHolder is " + a.getName());
+		System.out.println("The Balance Amount is  " + a.getbalance());
+		System.out.println("The Accountumber is " + a.getAccnum());
+		System.out.println("The AccountHolder age is " + a.getAge());*/
+		
+	}
+}
+
+/*class Student extends Account
+{
+	Student(String name,float age,long accnum) {
+		super(name,age,accnum);
+	      }
+	public static void main(String[] args) {
+		System.out.println("Choose 1 for Smith Account and 2 for kathy account");
+		Scanner input = new Scanner(System.in);
+		System.out.print("Enter User Input : ");
+		int userinput = input.nextInt();
+		System.out.print("Enter Intial Amount : ");
+		int intialbalance = input.nextInt();
+		System.out.print("Enter the deposit amount : ");
+		int depositamount = input.nextInt();
+		System.out.print("Enter How much you want to withdraw : ");
+		int withdraw = input.nextInt();
+		System.out.print("Enter Account Holder name : ");
+		String name = input.next(); 
+		System.out.print("Enter Age of  Account Holder name : ");
+		int age = input.nextInt();
+		System.out.print("Enter Account Number : ");
+		int accnum = input.nextInt();
+		Student s = new Student(name, accnum, accnum);		
+		 if(userinput ==1)
+		 {
+			s.setBalance(intialbalance);
+		    s.deposit(depositamount);
+			s.withdraw(withdraw);
+			s.setName(name);
+			s.setAccnum(accnum);
+			s.setAge(age);
+			 
+			 
+		 }
+		 else if(userinput == 2)
+		 {
+			 s.setBalance(intialbalance);
+			 s.deposit(depositamount);
+			 s.withdraw(withdraw);
+			 s.setName(name);
+			 s.setAccnum(accnum);
+			 s.setAge(age);
+			 
+		 }
+		 else
+		 {
+			 System.out.println("No choice is selected");
+		 }
+		
+		    System.out.println("\n");
+			System.out.println("-----------------------------------------");
+			System.out.println("The name of the AccountHolder is " + s.getName());
+			System.out.println("The Balance Amount is  " + s.getbalance());
+			System.out.println("The Accountumber is " + s.getAccnum());
+			System.out.println("The AccountHolder age is " + s.getAge());
+		
+		/*Student p = new Student("Preethi",21,5898);
+		p.deposit(500);
+		p.withdraw(100);
+		p.getbalance();
+		System.out.println("\n");
+		System.out.println("-----------------------------------------");
+		System.out.println("The name of the AccountHolder is " + p.getName());
+		System.out.println("The Balance Amount is  " + p.getbalance());
+		System.out.println("The Accountumber is " + p.getAccnum());
+		System.out.println("The AccountHolder age is " + p.getAge());
+	}	
+}*/
+
+
+
+4.2: Extend the functionality through Inheritanceand polymorphism (Maintenance)
+package lab4;
+
+public class Maintenance {
+
+	public static void main(String[] args) 
+	{		
+		/*SavingsAccount s = new SavingsAccount("Shannu", 05, 2563, 2000);
+		CurrentAccount c = new CurrentAccount("Preethi",21,6532,5800);
+		s.withdraw(100);
+		c.withdraw(200);*/
+		
+	}
+
+}
+class SavingsAccount extends Account
+{
+	public final double minbalance=500;
+	SavingsAccount(String name,float age,long accnum,double balance) {
+		super(name,age,accnum);
+	}
+	public void withdraw(double withdrawAmount)
+	{
+		if(this.balance>=minbalance)
+		{
+			this.balance = this.balance-withdrawAmount;
+		}
+		else
+		{
+			System.out.println("No balance");
+		}
+	}
+}
+class CurrentAccount extends Account
+{
+	 public double overdraftlimit=1000;
+	 CurrentAccount(String name,float age,long accnum,double balance) {
+			super(name,age,accnum);
+		}
+	 public void withdraw(double withdrawAmount)
+		{
+			if(this.balance<overdraftlimit)
+			{
+			  System.out.println("Your account exceeded the limit");
+			}
+			else
+			{
+				this.balance=this.balance-withdrawAmount;
+				
+			}
+		}
+	 
+	 
+}
+
+
